@@ -21,6 +21,15 @@ SERVO_t wheel ={
     .SERVO_FEEDBACK_PIN = 7
 };
 
+volatile uint32_t pulse_width = 0; // Pulse width in microseconds
+volatile uint8_t direction = 0; // 0 for CW, 1 for CCW
+volatile uint8_t stop = 0;
+volatile uint32_t feedback_timings[2];
+volatile uint32_t pulse_start_times[2];
+volatile float angular_positions[2]; //Angular position in degrees
+volatile float rpm = 0; //Rotational Speed in RPM
+volatile uint16_t adc_value = 0; //ADC Value
+volatile uint8_t value_ready = 0; //Flag to indicate new ADC value is ready
 
 
 int main(void){
