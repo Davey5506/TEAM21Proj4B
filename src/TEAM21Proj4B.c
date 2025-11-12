@@ -28,7 +28,7 @@ SERVO_t right_wheel ={
 };
 
 volatile uint8_t direction = 0; // 0 for CW, 1 for CCW
-volatile uint8_t stop = 0;
+volatile uint8_t stop = 1;
 volatile uint8_t value_ready = 0; //Flag to indicate new ADC value is ready
 volatile uint8_t sensor_values[4] = {0, 0, 0, 0};//Array for sensor values
 volatile uint32_t servo1_pulse_width = SERVO_NEUTRAL_PULSE_WIDTH; 
@@ -137,6 +137,12 @@ int main(void){
     init_adc(ADC1, 10); // Initialize ADC1 on channel 10 (PC0)
     init_adc_interrupt(ADC1, 2); // Enable ADC interrupt with priority 2
 
+    servo_control_set(1, SERVO_NEUTRAL_PULSE_WIDTH); //Set left wheel to neutral
+    servo_control_set(2, SERVO_NEUTRAL_PULSE_WIDTH); //Set right 
+    stop=1;
 
+    while(1){
+
+    };
     return 0;
 }
