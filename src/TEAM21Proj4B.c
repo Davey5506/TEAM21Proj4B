@@ -31,6 +31,8 @@ volatile uint8_t direction = 0; // 0 for CW, 1 for CCW
 volatile uint8_t stop = 0;
 volatile uint8_t value_ready = 0; //Flag to indicate new ADC value is ready
 volatile uint8_t sensor_values[4] = {0, 0, 0, 0};//Array for sensor values
+volatile uint32_t servo1_pulse_width = SERVO_NEUTRAL_PULSE_WIDTH; 
+volatile uint32_t servo2_pulse_width = SERVO_NEUTRAL_PULSE_WIDTH;
 
 void SysTick_Handler(void){
     // Start ADC conversion, but don't wait for it in the ISR
