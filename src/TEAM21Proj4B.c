@@ -122,6 +122,11 @@ int main(void){
 
     TIM3_INIT();
 
+    for (int i=0; i<= 3; i++){ //PC0-PC3 as inputs for sensors
+        set_pin_mode(GPIOC,i,INPUT);
+        set_pin_pull(GPIOC,i,PULL_DOWN);
+    }
+
 
     // Configure EXTI for button on PC13
     set_pin_mode(GPIOC, 13, INPUT); //PC13 as input for button
