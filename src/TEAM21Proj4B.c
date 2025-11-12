@@ -31,6 +31,11 @@ volatile float rpm = 0; //Rotational Speed in RPM
 volatile uint16_t adc_value = 0; //ADC Value
 volatile uint8_t value_ready = 0; //Flag to indicate new ADC value is ready
 
+void SysTick_Handler(void){
+    // Start ADC conversion, but don't wait for it in the ISR
+    adc_swtstart(ADC1);
+}
+
 
 int main(void){
     return 0;
