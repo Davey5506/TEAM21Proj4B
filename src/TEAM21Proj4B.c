@@ -30,6 +30,7 @@ volatile float angular_positions[2]; //Angular position in degrees
 volatile float rpm = 0; //Rotational Speed in RPM
 volatile uint16_t adc_value = 0; //ADC Value
 volatile uint8_t value_ready = 0; //Flag to indicate new ADC value is ready
+volatile uint8_t sensor_values[4] = {0, 0, 0, 0};//Array for sensor values
 
 void SysTick_Handler(void){
     // Start ADC conversion, but don't wait for it in the ISR
