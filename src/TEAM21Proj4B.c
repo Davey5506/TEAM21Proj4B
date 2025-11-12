@@ -90,6 +90,9 @@ void TIM3_IRQHandler(void){ //meaures pulse width and period of feedback signal
     }
 }
 
+void ADC_IRQHandler(void){
+}
+
 void EXTI15_10_IRQHandler(void){
     if(EXTI->PR & EXTI_PR_PR13){
         EXTI->PR |= EXTI_PR_PR13; //Clear pending register
