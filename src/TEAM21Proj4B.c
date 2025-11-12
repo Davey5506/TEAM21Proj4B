@@ -48,7 +48,11 @@ uint32_t lvl_to_pulse(uint16_t lvl, uint8_t direction){
 }
 
 void servo_control_set(uint8_t servo_num, uint32_t pulse_width){//Sets pulse width for servo
-
+    if(servo_num == 1){
+        TIM3->CCR1= pulse_width;//Left wheel on PC6
+    }else if(servo_num == 2){
+        TIM3->CCR3= pulse_width;//Right wheel on PC8
+    }
 }
 
 void TIM3_INIT(void){
