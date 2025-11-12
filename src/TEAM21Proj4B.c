@@ -133,6 +133,10 @@ int main(void){
     EXTI->IMR |= EXTI_IMR_MR13; //Unmask EXTI13
     EXTI->RTSR |= EXTI_RTSR_TR13; //Rising trigger
 
+    // Initialize ADC1
+    init_adc(ADC1, 10); // Initialize ADC1 on channel 10 (PC0)
+    init_adc_interrupt(ADC1, 2); // Enable ADC interrupt with priority 2
+
 
     return 0;
 }
