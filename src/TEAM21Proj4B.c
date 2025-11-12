@@ -44,6 +44,12 @@ uint32_t lvl_to_pulse(uint16_t lvl, uint8_t direction){
     }
 }
 
+void TIM3_IRQHandler(void){ //meaures pulse width and period of feedback signal
+    if (TIM3->SR & TIM_SR_UIF){ 
+        TIM3->SR &= ~TIM_SR_UIF; 
+    }
+}
+
 
 int main(void){
     return 0;
