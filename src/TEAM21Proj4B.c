@@ -111,5 +111,17 @@ void EXTI15_10_IRQHandler(void){
 
 
 int main(void){
+    // Initialize USART2 for serial communication at 115200 baud
+    init_usart(115200);
+    
+    init_sys_tick(SYSTEM_FREQ); // 1s tick
+    
+    // Initialize SSD
+    init_ssd(10);
+    display_num(0, 4);
+
+    TIM3_INIT();
+
+
     return 0;
 }
