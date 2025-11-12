@@ -123,5 +123,16 @@ int main(void){
     TIM3_INIT();
 
 
+    // Configure EXTI for button on PC13
+    set_pin_mode(GPIOC, 13, INPUT); //PC13 as input for button
+    set_pin_pull(GPIOC, 13, PULL_UP); //Enable pull-up resistor
+    RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN_Msk; //Enable SYSCFG clock
+    SYSCFG->EXTICR[3] |= SYSCFG_EXTICR4_EXTI13_PC;//Map EXTI13 to PC13
+    NVIC_EnableIRQ(EXTI15_10_IRQn); //Enable EXTI15_10 interrupt
+    NVIC_SetPriority(EXTI15_10_IRQn, 10); //Set priority to 1
+    EXTI->IMR |= EXTI_IMR_MR13; //Unmask EXTI13
+    EXTI->RTSR |= EXTI_RTSR_TR13; //Rising trigger
+
+
     return 0;
 }
