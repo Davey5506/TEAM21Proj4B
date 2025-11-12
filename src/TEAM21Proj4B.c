@@ -50,6 +50,19 @@ void TIM3_IRQHandler(void){ //meaures pulse width and period of feedback signal
     }
 }
 
+void EXTI15_10_IRQHandler(void){
+    if(EXTI->PR & EXTI_PR_PR13){
+        EXTI->PR |= EXTI_PR_PR13; //Clear pending register
+        if(!stop){
+            stop = !stop;
+            pulse_width = SERVO_NEUTRAL_PULSE_WIDTH; //Stop the wheel
+        }else{
+            stop = !stop;
+            direction = !direction;
+        }
+    }
+}
+
 
 int main(void){
     return 0;
