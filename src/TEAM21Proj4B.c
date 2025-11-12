@@ -15,10 +15,16 @@
 #define CCW_MIN_PULSE 1520
 #define CCW_MAX_PULSE 1720
 
-SERVO_t wheel ={
+SERVO_t left_wheel ={
     .SERVO_PIN_PORT = GPIOC,
-    .SERVO_PWM_PIN = 6,
-    .SERVO_FEEDBACK_PIN = 7
+    .SERVO_PWM_PIN = 6, //PC6
+    .SERVO_FEEDBACK_PIN =7 //not used
+};
+
+SERVO_t right_wheel ={
+    .SERVO_PIN_PORT = GPIOC,
+    .SERVO_PWM_PIN = 8, //PC8
+    .SERVO_FEEDBACK_PIN =9 //not used
 };
 
 volatile uint32_t pulse_width = 0; // Pulse width in microseconds
