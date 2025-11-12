@@ -48,11 +48,11 @@ uint32_t lvl_to_pulse(uint16_t lvl, uint8_t direction){
 }
 
 void TIM3_INIT(void){
-    GPIOC->AFR[0] &= ~(0xF << (wheel.SERVO_PWN_PIN *4));
-    GPIOC->AFR[0] |= (2 << (wheel.SERVO_PWM_PIN *4)); //AF2 for TIM3_CH1
+    GPIOC->AFR[0] &= ~(0xF << (left_wheel.SERVO_PWM_PIN *4));
+    GPIOC->AFR[0] |= (2 << (left_wheel.SERVO_PWM_PIN *4)); //AF2 for TIM3_CH1
 
-    GPIOC->AFR[1] &= ~(0xF << ((wheel.SERVO2_PWN_PIN -8) *4));
-    GPIOC->AFR[1] |= (2 << ((wheel.SERVO2_PWN_PIN -8) *4)); //AF2 for TIM3_CH2
+    GPIOC->AFR[1] &= ~(0xF << ((right_wheel.SERVO_PWM_PIN -8) *4));
+    GPIOC->AFR[1] |= (2 << ((right_wheel.SERVO_PWM_PIN -8) *4)); //AF2 for TIM3_CH2
 
     const uint32_t TIM3_ARR_VALUE= (TIM3_FREQ_HZ / PWM_FREQ_HZ)-1; 
     const uint16_t NEUTRAL_PULSE_VALUE= SERVO_NEUTRAL_PULSE_WIDTH; //1.5ms pulse width
@@ -71,7 +71,7 @@ void TIM3_INIT(void){
     TIM3->CCR3 = NEUTRAL_PULSE_VALUE;
 
     //Interrupt configuration
-    TIM3->DIER &= ~(TIM_DIER_CC1IE | TIM_DIER_CC2IE); 
+    TIM3->DIER &= ~(TIM_DIER_CC1IE | TIM_DIER_CC2IE | TIM_DIER_CC3IE);
     TIM3->DIER |= TIM_DIER_UIE; //Enable update interrupt
     init_timer_IRQ(TIM3, 2);//used helper to setup NVIC
 }
