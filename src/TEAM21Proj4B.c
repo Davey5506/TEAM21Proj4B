@@ -36,6 +36,14 @@ void SysTick_Handler(void){
     adc_swtstart(ADC1);
 }
 
+uint32_t lvl_to_pulse(uint16_t lvl, uint8_t direction){
+    if(direction == 0){ //Clockwise
+        return umap(lvl, 0,4095, CW_MIN_PULSE, CW_MAX_PULSE); 
+    } else { //Counter-Clockwise
+        return umap(lvl, 0, 4095, CCW_MIN_PULSE, CCW_MAX_PULSE);
+    }
+}
+
 
 int main(void){
     return 0;
