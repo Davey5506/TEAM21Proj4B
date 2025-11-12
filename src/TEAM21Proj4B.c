@@ -99,11 +99,11 @@ void EXTI15_10_IRQHandler(void){
     if(EXTI->PR & EXTI_PR_PR13){
         EXTI->PR |= EXTI_PR_PR13; //Clear pending register
         if(!stop){
-            stop = !stop;
+            stop = 1;
             servo_control_set(1, SERVO_NEUTRAL_PULSE_WIDTH);
             servo_control_set(2, SERVO_NEUTRAL_PULSE_WIDTH); //Stop the wheels
         }else{
-            stop = !stop;
+            stop = 0;
             direction = !direction;
         }
     }
