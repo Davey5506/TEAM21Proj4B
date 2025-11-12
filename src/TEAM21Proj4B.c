@@ -47,6 +47,10 @@ uint32_t lvl_to_pulse(uint16_t lvl, uint8_t direction){
     }
 }
 
+void servo_control_set(uint8_t servo_num, uint32_t pulse_width){//Sets pulse width for servo
+
+}
+
 void TIM3_INIT(void){
     GPIOC->AFR[0] &= ~(0xF << (left_wheel.SERVO_PWM_PIN *4));
     GPIOC->AFR[0] |= (2 << (left_wheel.SERVO_PWM_PIN *4)); //AF2 for TIM3_CH1
