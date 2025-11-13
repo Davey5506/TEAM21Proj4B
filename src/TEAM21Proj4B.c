@@ -26,6 +26,7 @@ int main(void){
     TIM3->CCER |= TIM_CCER_CC3E | TIM_CCER_CC4E; // Enable CH3 and CH4 outputs
     TIM3->CCR3 = SERVO_NEUTRAL_PULSE_WIDTH;
     TIM3->CCR4 = SERVO_NEUTRAL_PULSE_WIDTH;
+    TIM3->CR1 |= TIM_CR1_CEN;
 
     // Set up servos
     SERVO_t left_wheel = {
