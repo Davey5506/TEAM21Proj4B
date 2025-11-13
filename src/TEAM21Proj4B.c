@@ -55,11 +55,9 @@ void TIM3_IRQHandler(void){
 }
 
 int main(void){
-    // Initialize USART2 for serial communication at 115200 baud
-    init_usart(115200);
     // Initialize SSD
     init_ssd(10);
-    display_num(8888, 4);
+    display_num(0000, 4);
     
     // Setup TIM3
     init_gp_timer(TIM3, SYSTEM_FREQ, 10000, false);
