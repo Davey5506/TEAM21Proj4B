@@ -1,13 +1,15 @@
 #include "hat.h"
 #include <stdio.h>
 
-#define PWM_FREQ_HZ 50 // Standard servo PWM frequency
 #define SERVO_NEUTRAL_PULSE_WIDTH 1500 // 1.5ms pulse width for neutral position
 
 #define CW_MAX_PULSE 1480 
 #define CW_MIN_PULSE 1280
 #define CCW_MIN_PULSE 1520
 #define CCW_MAX_PULSE 1720
+#define TIM3_FREQ_HZ 1000000
+#define PWM_FREQ_HZ 50
+#define PWM_PERIOD (TIM3_FREQ_HZ / PWM_FREQ_HZ) // 20000 ticks for 20ms period
 
 enum PIN_VALUE sensors[4] = {PIN_ERROR, PIN_ERROR, PIN_ERROR, PIN_ERROR};
 volatile uint8_t stop_lines = 0;
@@ -58,10 +60,11 @@ int main(void){
     // Initialize SSD
     init_ssd(10);
     // Setup TIM3
-    init_gp_timer(TIM3, SYSTEM_FREQ, 10000, false);
-    TIM3->CCMR2 |= TIM_CCMR2_OC3CE | TIM_CCMR2_OC4CE; // PWM mode 1 for CH3 and CH4
+    init_gp_timer(TIM3, TIM3_FREQ_HZ, PWM_PERIOD, false);
+    // PWM mode 1 for CH3 and CH4
+    TIM3->CCMR2 |= (TIM_CCMR2_OC3M_2 | TIM_CCMR2_OC3M_1) | (TIM_CCMR2_OC4M_2 | TIM_CCMR2_OC4M_1);
     TIM3->CCER |= TIM_CCER_CC3E | TIM_CCER_CC4E; // Enable CH3 and CH4 outputs
-    TIM3->CCR3 = SERVO_NEUTRAL_PULSE_WIDTH;
+    TIM3->CCR3 = SERVO_NEUTRAL_PULSE_WIDTH; // PC8
     TIM3->CCR4 = SERVO_NEUTRAL_PULSE_WIDTH;
     TIM3->CR1 |= TIM_CR1_CEN;
 
