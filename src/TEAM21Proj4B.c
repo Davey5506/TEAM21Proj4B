@@ -9,7 +9,49 @@
 #define CCW_MIN_PULSE 1520
 #define CCW_MAX_PULSE 1720
 
-void SysTick_Handler(void){
+enum PIN_VALUE sensors[4] = {PIN_ERROR, PIN_ERROR, PIN_ERROR, PIN_ERROR};
+volatile uint8_t stop_lines = 0;
+volatile uint16_t sensor = 0;
+
+void drive_servo(void){
+    if(sensors[0] && sensors[1] && sensors[2] && sensors[3] && !stop_lines){
+        stop_lines++;
+    }else if(sensors[0] && sensors[1] && sensors[2] && sensors[3]){
+        stop_lines = 0;
+        TIM3->CCR3 = SERVO_NEUTRAL_PULSE_WIDTH;
+        TIM3->CCR4 = SERVO_NEUTRAL_PULSE_WIDTH;
+    }else if(sensors[1] && sensors[2]){
+        TIM3->CCR3 = 1280;
+        TIM3->CCR4 = 1720;
+    }else if(sensors[0] && sensors[1]){
+        TIM3->CCR3 = SERVO_NEUTRAL_PULSE_WIDTH;
+        TIM3->CCR4 = 1620;
+    }else if(sensors[2] && sensors[3]){
+        TIM3->CCR3 = 1380;
+        TIM3->CCR4 = SERVO_NEUTRAL_PULSE_WIDTH;
+    }
+}
+
+void read_sensors(void){
+    sensor = 0;
+    for(int i = 3; i >= 0; i--){
+        uint8_t val = read_pin(PMOD_C.PIN_PORTS[i], PMOD_C.PIN_NUMS[i]);
+        sensors[i] = val;
+    }
+    if(sensors[0]) sensor += 1000;
+    if(sensors[1]) sensor += 100;
+    if(sensors[2]) sensor += 10;
+    if(sensors[3]) sensor += 1;
+
+    display_num(sensor, 0);
+}
+
+void TIM3_IRQHandler(void){
+    if(TIM3->SR & TIM_SR_UIF){
+        read_sensors();
+        drive_servo();
+        TIM3->SR &= ~TIM_SR_UIF;
+    }
 }
 
 int main(void){
