@@ -14,19 +14,19 @@ volatile uint8_t stop_lines = 0;
 volatile uint16_t sensor = 0;
 
 void drive_servo(void){
-    if(sensors[0] && sensors[1] && sensors[2] && sensors[3] && !stop_lines){
+    if((sensor == 1111) && !stop_lines){
         stop_lines++;
-    }else if(sensors[0] && sensors[1] && sensors[2] && sensors[3]){
+    }else if((sensor == 1111)){
         stop_lines = 0;
         TIM3->CCR3 = SERVO_NEUTRAL_PULSE_WIDTH;
         TIM3->CCR4 = SERVO_NEUTRAL_PULSE_WIDTH;
-    }else if(sensors[1] && sensors[2]){
+    }else if(sensor == 0110){
         TIM3->CCR3 = 1620;
         TIM3->CCR4 = 1380;
-    }else if(sensors[0] && sensors[1]){
+    }else if(sensor == 1100 || sensor == 1000){
         TIM3->CCR3 = SERVO_NEUTRAL_PULSE_WIDTH;
         TIM3->CCR4 = 1320;
-    }else if(sensors[2] && sensors[3]){
+    }else if(sensor == 0011 || sensor == 0001){
         TIM3->CCR3 = 1540;
         TIM3->CCR4 = SERVO_NEUTRAL_PULSE_WIDTH;
     }
