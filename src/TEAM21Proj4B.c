@@ -35,7 +35,7 @@ void drive_servo(void){
 void read_sensors(void){
     sensor = 0;
     for(int i = 3; i >= 0; i--){
-        uint8_t val = read_pin(PMOD_C.PIN_PORTS[i], PMOD_C.PIN_NUMS[i]);
+        uint8_t val = !read_pin(PMOD_C.PIN_PORTS[i], PMOD_C.PIN_NUMS[i]);
         sensors[i] = val;
     }
     if(sensors[0]) sensor += 1000;
