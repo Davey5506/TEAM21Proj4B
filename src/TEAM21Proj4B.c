@@ -42,23 +42,15 @@ int main(void){
         set_pin_pull(PMOD_C.PIN_PORTS[i], PMOD_C.PIN_NUMS[i], PULL_DOWN);
     }
 
-    // Configure EXTI for button on PC13
-    set_pin_mode(GPIOC, 13, INPUT); //PC13 as input for button
-    set_pin_pull(GPIOC, 13, PULL_UP); //Enable pull-up resistor
-    RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN_Msk; //Enable SYSCFG clock
-    SYSCFG->EXTICR[3] |= SYSCFG_EXTICR4_EXTI13_PC;//Map EXTI13 to PC13
-    NVIC_EnableIRQ(EXTI15_10_IRQn); //Enable EXTI15_10 interrupt
-    NVIC_SetPriority(EXTI15_10_IRQn, 10); //Set priority to 1
-    EXTI->IMR |= EXTI_IMR_MR13; //Unmask EXTI13
-    EXTI->RTSR |= EXTI_RTSR_TR13; //Rising trigger
+    // Configure EXTI for PMOD C pins (PC0-PC3)
+    RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
+    SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI0_PC|SYSCFG_EXTICR1_EXTI1_PC|SYSCFG_EXTICR1_EXTI2_PC|SYSCFG_EXTICR1_EXTI3_PC;
 
-    // Initialize ADC1
-    init_adc(ADC1, 10); // Initialize ADC1 on channel 10 (PC0)
-    init_adc_interrupt(ADC1, 2); // Enable ADC interrupt with priority 2
-
-    servo_control_set(1, SERVO_NEUTRAL_PULSE_WIDTH); //Set left wheel to neutral
-    servo_control_set(2, SERVO_NEUTRAL_PULSE_WIDTH); //Set right 
-    stop=1;
+    // Enable EXTI0-3 interrupts
+    EXTI->IMR |= EXTI_IMR_MR0 | EXTI_IMR_MR1 | EXTI_IMR_MR2 | EXTI_IMR_MR3;
+    EXTI->RTSR |= EXTI_RTSR_TR0 | EXTI_RTSR_TR1 | EXTI_RTSR_TR2 | EXTI_RTSR_TR3;
+    NVIC_EnableIRQ(EXTI0_IRQn);
+    NVIC_SetPriority(EXTI0_IRQn, 1); 
 
     while(1){};
     return 0;
