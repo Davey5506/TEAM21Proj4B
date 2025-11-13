@@ -58,8 +58,7 @@ int main(void){
     // Initialize SSD
     init_ssd(10);
     // Setup TIM3
-    init_gp_timer(TIM3, SYSTEM_FREQ, 16000, false);
-    init_timer_IRQ(TIM3, 5); // 1ms interval for servo control
+    init_gp_timer(TIM3, SYSTEM_FREQ, 10000, false);
     TIM3->CCMR2 |= TIM_CCMR2_OC3CE | TIM_CCMR2_OC4CE; // PWM mode 1 for CH3 and CH4
     TIM3->CCER |= TIM_CCER_CC3E | TIM_CCER_CC4E; // Enable CH3 and CH4 outputs
     TIM3->CCR3 = SERVO_NEUTRAL_PULSE_WIDTH;
