@@ -111,6 +111,16 @@ void EXTI15_10_IRQHandler(void){
 
 
 int main(void){
+    SERVO_t left_wheel = {
+        .SERVO_PIN_PORT = GPIOC,
+        .SERVO_PWM_PIN = 8,
+        .SERVO_FEEDBACK_PIN = 16 // Does not exist, placeholder
+    };
+    SERVO_t right_wheel = {
+        .SERVO_PIN_PORT = GPIOC,
+        .SERVO_PWM_PIN = 9,
+        .SERVO_FEEDBACK_PIN = 16 // Does not exist, placeholder
+    };
     // Initialize USART2 for serial communication at 115200 baud
     init_usart(115200);
     
