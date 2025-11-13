@@ -12,6 +12,7 @@
 enum PIN_VALUE sensors[4] = {PIN_ERROR, PIN_ERROR, PIN_ERROR, PIN_ERROR};
 volatile uint8_t stop_lines = 0;
 volatile uint16_t sensor = 0;
+volatile uint16_t prev_sensor = 0;
 
 void drive_servo(void){
     if((sensor == 1111) && !stop_lines){
@@ -33,11 +34,12 @@ void drive_servo(void){
 }
 
 void read_sensors(void){
-    sensor = 0;
     for(int i = 3; i >= 0; i--){
         uint8_t val = !read_pin(PMOD_C.PIN_PORTS[i], PMOD_C.PIN_NUMS[i]);
         sensors[i] = val;
     }
+    prev_sensor = sensor;
+    sensor = 0;
     if(sensors[0]) sensor += 1000;
     if(sensors[1]) sensor += 100;
     if(sensors[2]) sensor += 10;
