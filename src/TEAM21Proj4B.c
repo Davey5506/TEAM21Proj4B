@@ -89,16 +89,6 @@ int main(void){
         set_pin_pull(PMOD_C.PIN_PORTS[i], PMOD_C.PIN_NUMS[i], PULL_DOWN);
     }
 
-    // Configure EXTI for PMOD C pins (PC0-PC3)
-    RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
-    SYSCFG->EXTICR[0] |= SYSCFG_EXTICR1_EXTI0_PC|SYSCFG_EXTICR1_EXTI1_PC|SYSCFG_EXTICR1_EXTI2_PC|SYSCFG_EXTICR1_EXTI3_PC;
-
-    // Enable EXTI0-3 interrupts
-    EXTI->IMR |= EXTI_IMR_MR0 | EXTI_IMR_MR1 | EXTI_IMR_MR2 | EXTI_IMR_MR3;
-    EXTI->RTSR |= EXTI_RTSR_TR0 | EXTI_RTSR_TR1 | EXTI_RTSR_TR2 | EXTI_RTSR_TR3;
-    NVIC_EnableIRQ(EXTI0_IRQn);
-    NVIC_SetPriority(EXTI0_IRQn, 1); 
-
     while(1){};
     return 0;
 }
