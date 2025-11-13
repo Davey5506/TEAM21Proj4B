@@ -72,14 +72,6 @@ void read_sensors(void){
     display_num(sensor, 0);
 }
 
-void TIM3_IRQHandler(void){
-    if(TIM3->SR & TIM_SR_UIF){
-        read_sensors();
-        drive_servo();
-        TIM3->SR &= ~TIM_SR_UIF;
-    }
-}
-
 int main(void){
     // Initialize SSD
     init_ssd(10);
