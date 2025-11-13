@@ -111,6 +111,15 @@ void EXTI15_10_IRQHandler(void){
 
 
 int main(void){
+    // Initialize USART2 for serial communication at 115200 baud
+    init_usart(115200);
+    init_sys_tick(SYSTEM_FREQ); // 1s tick
+    // Initialize SSD
+    init_ssd(10);
+    display_num(0, 4);
+    TIM3_INIT();
+
+    
     SERVO_t left_wheel = {
         .SERVO_PIN_PORT = GPIOC,
         .SERVO_PWM_PIN = 8,
@@ -121,15 +130,8 @@ int main(void){
         .SERVO_PWM_PIN = 9,
         .SERVO_FEEDBACK_PIN = 16 // Does not exist, placeholder
     };
-    // Initialize USART2 for serial communication at 115200 baud
-    init_usart(115200);
-    init_sys_tick(SYSTEM_FREQ); // 1s tick
-    // Initialize SSD
-    init_ssd(10);
-    display_num(0, 4);
-
-    TIM3_INIT();
-
+    init_servo(&left_wheel);
+    init_servo(&right_wheel);
     for (int i=0; i<= 3; i++){ //PC0-PC3 as inputs for sensors
         set_pin_mode(GPIOC,i,INPUT);
         set_pin_pull(GPIOC,i,PULL_DOWN);
