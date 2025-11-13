@@ -119,7 +119,7 @@ int main(void){
     display_num(0, 4);
     TIM3_INIT();
 
-    
+    // Set up servos
     SERVO_t left_wheel = {
         .SERVO_PIN_PORT = GPIOC,
         .SERVO_PWM_PIN = 8,
@@ -132,11 +132,13 @@ int main(void){
     };
     init_servo(&left_wheel);
     init_servo(&right_wheel);
-    for (int i=0; i<= 3; i++){ //PC0-PC3 as inputs for sensors
-        set_pin_mode(GPIOC,i,INPUT);
-        set_pin_pull(GPIOC,i,PULL_DOWN);
-    }
 
+    // Setup PMOD C for sensors
+    init_pmod(PMOD_C);
+    for(int i = 0; i < 4; i++){
+        set_pin_mode(PMOD_C.PIN_PORTS[i], PMOD_C.PIN_NUMS[i], INPUT);
+        set_pin_pull(PMOD_C.PIN_PORTS[i], PMOD_C.PIN_NUMS[i], PULL_DOWN);
+    }
 
     // Configure EXTI for button on PC13
     set_pin_mode(GPIOC, 13, INPUT); //PC13 as input for button
