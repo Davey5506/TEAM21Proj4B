@@ -12,7 +12,6 @@
 enum PIN_VALUE sensors[4] = {PIN_ERROR, PIN_ERROR, PIN_ERROR, PIN_ERROR};
 volatile uint8_t stop_lines = 0;
 volatile uint16_t sensor = 0;
-volatile uint16_t prev_sensor = 0;
 
 void drive_servo(void){
     if(sensors[0] && sensors[1] && sensors[2] && sensors[3] && !stop_lines){
@@ -34,12 +33,11 @@ void drive_servo(void){
 }
 
 void read_sensors(void){
+    sensor = 0;
     for(int i = 3; i >= 0; i--){
         uint8_t val = !read_pin(PMOD_C.PIN_PORTS[i], PMOD_C.PIN_NUMS[i]);
         sensors[i] = val;
     }
-    prev_sensor = sensor;
-    sensor = 0;
     if(sensors[0]) sensor += 1000;
     if(sensors[1]) sensor += 100;
     if(sensors[2]) sensor += 10;
@@ -59,8 +57,6 @@ void TIM3_IRQHandler(void){
 int main(void){
     // Initialize SSD
     init_ssd(10);
-    display_num(0000, 4);
-    
     // Setup TIM3
     init_gp_timer(TIM3, SYSTEM_FREQ, 16000, false);
     init_timer_IRQ(TIM3, 5); // 1ms interval for servo control
