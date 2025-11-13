@@ -123,9 +123,7 @@ int main(void){
     };
     // Initialize USART2 for serial communication at 115200 baud
     init_usart(115200);
-    
     init_sys_tick(SYSTEM_FREQ); // 1s tick
-    
     // Initialize SSD
     init_ssd(10);
     display_num(0, 4);
@@ -156,8 +154,6 @@ int main(void){
     servo_control_set(2, SERVO_NEUTRAL_PULSE_WIDTH); //Set right 
     stop=1;
 
-    while(1){
-
-    };
+    while(1){};
     return 0;
 }
