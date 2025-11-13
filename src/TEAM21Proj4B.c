@@ -16,21 +16,45 @@ enum PIN_VALUE prev_sensors[4] = {PIN_ERROR, PIN_ERROR, PIN_ERROR, PIN_ERROR};
 volatile uint8_t stop_lines = 0;
 volatile uint16_t sensor = 0;
 
+void move_forward(void){
+    TIM3->CCR3 = CCW_MAX_PULSE - 100;
+    TIM3->CCR4 = CW_MIN_PULSE + 110; 
+}
+
+void turn_right(void){
+    TIM3->CCR3 = CCW_MIN_PULSE + 40; 
+    TIM3->CCR4 = CCW_MIN_PULSE + 50; 
+}
+
+void turn_left(void){
+    TIM3->CCR3 = CW_MAX_PULSE - 40; 
+    TIM3->CCR4 = CW_MAX_PULSE - 50; 
+}
+
 void drive_servo(void){ 
-    if((sensors[0] && sensors[1] && sensors[2] && sensors[3]) == (prev_sensors[0] && prev_sensors[1] && prev_sensors[2] && prev_sensors[3])){
+    if(sensors[0] && sensors[1] && sensors[2] && sensors[3]){
+        if(!stop_lines){
+            stop_lines++;
+        } else if(stop_lines && !sensors[0] && !sensors[1] && !sensors[2] && !sensors[3]){
         stop_lines = 0;
+            TIM3->CCR3 = SERVO_NEUTRAL_PULSE_WIDTH;
+            TIM3->CCR4 = SERVO_NEUTRAL_PULSE_WIDTH;
+        }
+    }else if(!sensors[0] && !sensors[1] && !sensors[2] && !sensors[3]){
         TIM3->CCR3 = SERVO_NEUTRAL_PULSE_WIDTH;
         TIM3->CCR4 = SERVO_NEUTRAL_PULSE_WIDTH;
     }else if(sensors[1] && sensors[2]){
-        TIM3->CCR3 = 1620;
-        TIM3->CCR4 = 1380;
+        if(sensors[0]){
+            turn_left();
+        }else if(sensors[3]){
+            turn_right();
+        }else{
+            move_forward();
+        }
     }else if(sensors[0] && sensors[1]){
-        TIM3->CCR3 = 1380;
-        TIM3->CCR4 = 1380;
+        turn_left();
     }else if(sensors[2] && sensors[3]){
-
-        TIM3->CCR3 = 1620;
-        TIM3->CCR4 = 1620;
+        turn_right();
     }
 }
 
