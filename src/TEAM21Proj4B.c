@@ -12,13 +12,12 @@
 #define PWM_PERIOD (TIM3_FREQ_HZ / PWM_FREQ_HZ) // 20000 ticks for 20ms period
 
 enum PIN_VALUE sensors[4] = {PIN_ERROR, PIN_ERROR, PIN_ERROR, PIN_ERROR};
+enum PIN_VALUE prev_sensors[4] = {PIN_ERROR, PIN_ERROR, PIN_ERROR, PIN_ERROR};
 volatile uint8_t stop_lines = 0;
 volatile uint16_t sensor = 0;
 
 void drive_servo(void){ 
-    if(sensors[0] && sensors[1] && sensors[2] && sensors[3] && !stop_lines){
-        stop_lines++;
-    }else if(sensors[0] && sensors[1] && sensors[2] && sensors[3]){
+    if((sensors[0] && sensors[1] && sensors[2] && sensors[3]) == (prev_sensors[0] && prev_sensors[1] && prev_sensors[2] && prev_sensors[3])){
         stop_lines = 0;
         TIM3->CCR3 = SERVO_NEUTRAL_PULSE_WIDTH;
         TIM3->CCR4 = SERVO_NEUTRAL_PULSE_WIDTH;
@@ -27,9 +26,9 @@ void drive_servo(void){
         TIM3->CCR4 = 1380;
     }else if(sensors[0] && sensors[1]){
         TIM3->CCR3 = SERVO_NEUTRAL_PULSE_WIDTH;
-        TIM3->CCR4 = 1320;
+        TIM3->CCR4 = 1380;
     }else if(sensors[2] && sensors[3]){
-        TIM3->CCR3 = 1540;
+        TIM3->CCR3 = 1620;
         TIM3->CCR4 = SERVO_NEUTRAL_PULSE_WIDTH;
     }
 }
@@ -89,6 +88,9 @@ int main(void){
         set_pin_pull(PMOD_C.PIN_PORTS[i], PMOD_C.PIN_NUMS[i], PULL_DOWN);
     }
 
-    while(1){};
+    while(1){
+        read_sensors();
+        drive_servo();
+    };
     return 0;
 }
