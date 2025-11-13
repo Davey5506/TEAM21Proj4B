@@ -36,7 +36,7 @@ void drive_servo(void){
         if(!stop_lines){
             stop_lines++;
         } else if(stop_lines && !sensors[0] && !sensors[1] && !sensors[2] && !sensors[3]){
-        stop_lines = 0;
+            stop_lines = 0;
             TIM3->CCR3 = SERVO_NEUTRAL_PULSE_WIDTH;
             TIM3->CCR4 = SERVO_NEUTRAL_PULSE_WIDTH;
         }
