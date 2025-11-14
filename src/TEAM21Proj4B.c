@@ -153,8 +153,18 @@ int main(void){
 
     char buffer[50];
     while(1){
-        read_sensors();
-        drive_servo();
+        if(start && !read_pin(GPIOA, 0)){
+            read_sensors();
+            blank_drive();
+        }else if(start && read_pin(GPIOA, 0)){
+            read_sensors();
+            line_drive();
+        }else{
+            TIM3->CCR3 = SERVO_NEUTRAL_PULSE_WIDTH;
+            TIM3->CCR4 = SERVO_NEUTRAL_PULSE_WIDTH;
+        }
+        sprintf(buffer, "Stop Flag: %u\r\n", stop_lines);
+        send_string(buffer);
     };
     return 0;
 }
