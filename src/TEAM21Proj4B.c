@@ -10,24 +10,26 @@
 #define TIM3_FREQ_HZ 1000000
 #define PWM_FREQ_HZ 50
 #define PWM_PERIOD (TIM3_FREQ_HZ / PWM_FREQ_HZ) // 20000 ticks for 20ms period
-
+#define STOP_SPEED 150
 enum PIN_VALUE sensors[4] = {PIN_ERROR, PIN_ERROR, PIN_ERROR, PIN_ERROR};
 enum PIN_VALUE prev_sensors[4] = {PIN_ERROR, PIN_ERROR, PIN_ERROR, PIN_ERROR};
+volatile uint16_t speed[2] = {110, 110};
 volatile uint8_t stop_lines = 0;
 volatile uint16_t sensor = 0;
+volatile bool start = false;
 
 void move_forward(void){
-    TIM3->CCR3 = CCW_MAX_PULSE - 100;
-    TIM3->CCR4 = CW_MIN_PULSE + 110; 
+    TIM3->CCR3 = CCW_MAX_PULSE - speed[0];
+    TIM3->CCR4 = CW_MIN_PULSE + speed[1]; 
 }
 
 void turn_right(void){
     TIM3->CCR3 = CCW_MIN_PULSE + 40; 
-    TIM3->CCR4 = CCW_MIN_PULSE + 50; 
+    TIM3->CCR4 = CCW_MIN_PULSE + 10; 
 }
 
 void turn_left(void){
-    TIM3->CCR3 = CW_MAX_PULSE - 40; 
+    TIM3->CCR3 = CW_MAX_PULSE - 30; 
     TIM3->CCR4 = CW_MAX_PULSE - 50; 
 }
 
