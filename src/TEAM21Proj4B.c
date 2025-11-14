@@ -135,6 +135,23 @@ int main(void){
         set_pin_pull(PMOD_C.PIN_PORTS[i], PMOD_C.PIN_NUMS[i], PULL_DOWN);
     }
 
+    RCC->APB2ENR |= RCC_APB2ENR_SYSCFGEN;
+    SYSCFG->EXTICR[3] |= SYSCFG_EXTICR4_EXTI13_PC;
+    EXTI->IMR |= EXTI_IMR_IM13; 
+    EXTI->FTSR |= EXTI_FTSR_TR13;
+    set_pin_pull(GPIOC, 13, PULL_UP);
+    set_pin_mode(GPIOC, 13, INPUT);
+    NVIC_EnableIRQ(EXTI15_10_IRQn);
+    NVIC_SetPriority(EXTI15_10_IRQn, 2);
+
+    init_pmod(PMOD_B);
+    for(int i = 0; i < 4; i++){
+        set_pin_mode(PMOD_B.PIN_PORTS[i], PMOD_B.PIN_NUMS[i], INPUT);
+        set_pin_pull(PMOD_B.PIN_PORTS[i], PMOD_B.PIN_NUMS[i], PULL_DOWN);
+    }
+    set_pin_mode(GPIOA, 5, OUTPUT);
+
+    char buffer[50];
     while(1){
         read_sensors();
         drive_servo();
