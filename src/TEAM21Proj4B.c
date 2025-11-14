@@ -33,16 +33,8 @@ void turn_left(void){
     TIM3->CCR4 = CW_MAX_PULSE - 50; 
 }
 
-void drive_servo(void){ 
-    if(sensors[0] && sensors[1] && sensors[2] && sensors[3]){
-        if(!stop_lines){
-            stop_lines++;
-        } else if(stop_lines && !sensors[0] && !sensors[1] && !sensors[2] && !sensors[3]){
-            stop_lines = 0;
-            TIM3->CCR3 = SERVO_NEUTRAL_PULSE_WIDTH;
-            TIM3->CCR4 = SERVO_NEUTRAL_PULSE_WIDTH;
-        }
-    }else if(!sensors[0] && !sensors[1] && !sensors[2] && !sensors[3]){
+void blank_drive(void){ 
+    if(!sensors[0] && !sensors[1] && !sensors[2] && !sensors[3]){
         TIM3->CCR3 = SERVO_NEUTRAL_PULSE_WIDTH;
         TIM3->CCR4 = SERVO_NEUTRAL_PULSE_WIDTH;
     }else if(sensors[1] && sensors[2]){
@@ -60,6 +52,33 @@ void drive_servo(void){
     }
 }
 
+void line_drive(void){
+    if(sensors[0] && sensors[1] && sensors[2] && sensors[3]){
+        if(!stop_lines){
+            TIM4->CNT = 0;
+            stop_lines = 1;
+            speed[0] += 50;
+            speed[1] += 50;
+        }else if(stop_lines && (sensors[0] && sensors[1] && sensors[2] && sensors[3]) && TIM4->CNT > 1000){
+            stop_lines = 0;
+            TIM3->CCR3 = SERVO_NEUTRAL_PULSE_WIDTH;
+            TIM3->CCR4 = SERVO_NEUTRAL_PULSE_WIDTH;
+        }else{
+            stop_lines = 0;
+            speed[0] -= 50;
+            speed[1] -= 50;
+        }
+    }else if(!sensors[0] && !sensors[1] && !sensors[2] && !sensors[3]){
+        TIM3->CCR3 = SERVO_NEUTRAL_PULSE_WIDTH;
+        TIM3->CCR4 = SERVO_NEUTRAL_PULSE_WIDTH;
+    }else if(sensors[1] && sensors[2]){
+        move_forward();
+    }else if(sensors[0] && sensors[1]){
+        turn_left();
+    }else if(sensors[2] && sensors[3]){
+        turn_right();
+    }
+}
 void read_sensors(void){
     sensor = 0;
     for(int i = 3; i >= 0; i--){
