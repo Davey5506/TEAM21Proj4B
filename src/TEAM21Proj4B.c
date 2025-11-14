@@ -103,6 +103,7 @@ void EXTI15_10_IRQHandler(void){
 int main(void){
     // Initialize SSD
     init_ssd(10);
+    init_usart(115200);
     // Setup TIM3
     init_gp_timer(TIM3, TIM3_FREQ_HZ, PWM_PERIOD, false);
     // PWM mode 1 for CH3 and CH4
