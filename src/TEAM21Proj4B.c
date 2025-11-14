@@ -112,6 +112,7 @@ int main(void){
     TIM3->CCR4 = SERVO_NEUTRAL_PULSE_WIDTH;
     TIM3->CR1 |= TIM_CR1_CEN;
 
+    init_gp_timer(TIM4, 1000, 30000, true);
     // Set up servos
     SERVO_t left_wheel = {
         .SERVO_PIN_PORT = GPIOC,
